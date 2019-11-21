@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Assignemt</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+    <div class="row">
+            <table class="table" id="dragonData">
+                    <thead>
+                      <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Fav Food</th>
+                        <th scope="col">Location</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+  
+                    </tbody>
+                  </table>
+    </div>
+  </div>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-database.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyAkCSPzunexUVU4y9PWyHnq9SiktIze2F0",
+    authDomain: "dragon-8f156.firebaseapp.com",
+    databaseURL: "https://dragon-8f156.firebaseio.com",
+    projectId: "dragon-8f156",
+    storageBucket: "dragon-8f156.appspot.com",
+    messagingSenderId: "909917871076",
+    appId: "1:909917871076:web:f04c9524e941f982f845f1",
+    measurementId: "G-YLB427034F"
+  };
+  // Initialize Firebase
+  $( document ).ready(function() {
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  var database = firebase.database();
+  var dragonDB = firebase.database().ref('dragon/');
+    var keys = dragonDB.once('value').then(function(datakey){
+        // var datakeys = Object.keys(datakey) ;
+        // console.log(datakeys); 
+        var i = 0;
+
+        datakey.forEach(function(data){
+            var dataDragon = data.val();
+            var dragonTable = $('#dragonData tbody');
+            dragonTable.append("<tr><td>"+dataDragon.name+"</td><td>"+dataDragon.fav_food+"</td><td>"+dataDragon.location+"<br/><br/><div class='row'><input type='text' placeholder='update location' class='form-control col-lg-4 mr-2'> <button class='update-location btn btn-primary col-lg-2' type='button' data-id='"+Object.keys(datakey.val())[i]+"'>update</button></td></tr>")
+            i++;
+            $('.update-location').on("click", function(){            
+                var dataId = $(this).attr("data-id");
+                var newValue = $(this).prev("input").val();
+                firebase.database().ref('dragon/'+dataId+'/location').set(newValue);
+
+            });
+            
+        });
+    });
+    });
+
+</script>
+
+</body>
+</html>
