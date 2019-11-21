@@ -71,6 +71,7 @@
                 var dataId = $(this).attr("data-id");
                 var newValue = $(this).prev("input").val();
                 firebase.database().ref('dragon/'+dataId+'/location').set(newValue);
+                  location.reload();
 
             });
             
